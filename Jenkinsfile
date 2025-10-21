@@ -6,7 +6,7 @@ pipeline {
 	        MAJOR = '1'
 	        MINOR = '0'
 	        //Orchestrator Services
-	        UIPATH_ORCH_URL = "https://cloud.uipath.com/"
+	        UIPATH_ORCH_URL = "https://cloud.uipath.com"
 	        UIPATH_ORCH_LOGICAL_NAME = "octobyaktdig"
 	        UIPATH_ORCH_TENANT_NAME = "DefaultTenant"
 	        UIPATH_ORCH_FOLDER_NAME = "Shared"
@@ -44,7 +44,28 @@ pipeline {
         )
 	            }
 	        }
-	         // Test Stages
+	         
+
+stage('Deploy to UAT') {
+	            steps {
+	                echo "Deploying ${BRANCH_NAME} to UAT "
+                UiPathDeploy (
+                packagePath: "Output\\${env.BUILD_NUMBER}",
+                orchestratorAddress: "${UIPATH_ORCH_URL}",
+                orchestratorTenant: "${UIPATH_ORCH_TENANT_NAME}",
+                folderName: "${UIPATH_ORCH_FOLDER_NAME}",
+                environments: 'DEV',
+                //credentials: [$class: 'UserPassAuthenticationEntry', credentialsId: 'f95e269b-ef19-4cc6-9ab7-955761c2fd00']
+                credentials: Token(accountName: "${UIPATH_ORCH_LOGICAL_NAME}", credentialsId: 'APIUserKey'), 
+				traceLevel: 'None',
+				entryPointPaths: 'Main.xaml'
+	
+
+	        )
+	            }
+	        }
+
+// Test Stages
 	        stage('Test') {
 	            steps {
 	                echo 'Testing..the workflow...'
@@ -86,7 +107,7 @@ pipeline {
 	          echo "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.JOB_DISPLAY_URL})"
 	        }
 	        always {
-	          echo "cleanWs()"
+	           cleanWs()
 	            /* Clean workspace if success */	           
 	        }
 	    }
