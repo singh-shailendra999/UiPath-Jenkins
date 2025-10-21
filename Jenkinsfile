@@ -36,8 +36,8 @@ pipeline {
 	            steps {
 	                echo "Building..with ${WORKSPACE}"
 	                UiPathPack (
-                      outputPath: "Output\\${env.BUILD_NUMBER}",
-                      projectJsonPath: "project.json",
+                      outputPath: "${WORKSPACE}\\Output\\${env.BUILD_NUMBER}",
+                      projectJsonPath: "${WORKSPACE}",
                       version: [$class: 'ManualVersionEntry', version: "${MAJOR}.${MINOR}.${env.BUILD_NUMBER}"],
                       useOrchestrator: false,
 					  traceLevel: 'None'
