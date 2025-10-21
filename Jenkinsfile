@@ -46,24 +46,6 @@ pipeline {
 	        }
 	         
 
-stage('Deploy to UAT') {
-	            steps {
-	                echo "Deploying ${BRANCH_NAME} to UAT "
-                UiPathDeploy (
-                packagePath: "Output\\${env.BUILD_NUMBER}",
-                orchestratorAddress: "${UIPATH_ORCH_URL}",
-                orchestratorTenant: "${UIPATH_ORCH_TENANT_NAME}",
-                folderName: "${UIPATH_ORCH_FOLDER_NAME}",
-                environments: 'DEV',
-                //credentials: [$class: 'UserPassAuthenticationEntry', credentialsId: 'f95e269b-ef19-4cc6-9ab7-955761c2fd00']
-                credentials: Token(accountName: "${UIPATH_ORCH_LOGICAL_NAME}", credentialsId: 'APIUserKey'), 
-				traceLevel: 'None',
-				entryPointPaths: 'Main.xaml'
-	
-
-	        )
-	            }
-	        }
 
 // Test Stages
 	        stage('Test') {
@@ -75,7 +57,24 @@ stage('Deploy to UAT') {
 
 	         // Deploy Stages
 	        
+	stage('Deploy to UAT') {
+	            steps {
+	                echo "Deploying ${BRANCH_NAME} to UAT "
+                UiPathDeploy (
+                packagePath: "Output\\${env.BUILD_NUMBER}",
+                orchestratorAddress: "${UIPATH_ORCH_URL}",
+                orchestratorTenant: "${UIPATH_ORCH_TENANT_NAME}",
+                folderName: "${UIPATH_ORCH_FOLDER_NAME}",
+                environments: 'DEV',
+                //credentials: [$class: 'UserPassAuthenticationEntry', credentialsId: 'APIUserKey']
+                credentials: Token(accountName: "${UIPATH_ORCH_LOGICAL_NAME}", credentialsId: 'f95e269b-ef19-4cc6-9ab7-955761c2fd00'), 
+				traceLevel: 'None',
+				entryPointPaths: 'Main.xaml'
 	
+
+	        )
+	            }
+	        }
 
 	
 
