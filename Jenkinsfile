@@ -60,7 +60,7 @@ pipeline {
 	stage('Deploy to UAT') {
 	            steps {
 	                echo "Deploying ${BRANCH_NAME} to UAT "
-                UiPathDeploy (
+                UiPathDeploy createProcess: true
                 packagePath: "Output\\${env.BUILD_NUMBER}",
                 orchestratorAddress: "${UIPATH_ORCH_URL}",
                 orchestratorTenant: "${UIPATH_ORCH_TENANT_NAME}",
@@ -72,7 +72,7 @@ pipeline {
 				entryPointPaths: 'Main.xaml'
 	
 
-	        )
+	        
 	            }
 	        }
 
